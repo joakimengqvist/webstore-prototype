@@ -1,0 +1,138 @@
+﻿<html>
+<head>
+    <!--
+    required head tags, i choose to use https links as js and css includes for making the project easier to manage,
+    in a deployed production app I would have these locally to not be reliant on other services for UX and design
+    -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!--
+    Product Details Page
+    Page for product details page
+    -->
+
+    {{>headerproductdetails}}
+
+    <main>
+        <div class="container mb-4 mt-2">
+
+            {{#data}}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <span><a href="/">Home</a></span>
+                    <span class="text-primary"> / </span>
+                    <span><a href="/products/itemsdetails/{{id}}">{{name}}</a></span>
+                </div>
+                <div class="col-md-6 text-right">
+                    <span><a href="/shoppingcart">Go To Cart ...<span class="material-icons" style="font-size: 20px; position:relative; top: 2px">shopping_cart</span></a></span>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mt-2 bg-white border shadow">
+                    <form method="post" action="/products/additem">
+                        <input type="hidden" name="id" value="{{id}}" />
+
+                        <div class="pt-3 pb-3 pl-4">
+                            <div class="row">
+                                <div class="col-md-12"><span id="{{name}}" class="h5">{{name}} | </span><span id="{{id}}"></span></div>
+                                <script>
+                                    // Simple 'hack' that's hardcoded to fix specific � character problem from json import,
+                                    // this should be fixed from the database for easier mantainment and development.
+                                    var string = '{{ name }}';
+                                    if (string.indexOf('�') != -1) {
+                                        var string = string.replace(/[�]/g, '&aring');
+                                        document.getElementById('{{name}}').innerHTML = string + ' | ';
+                                    }
+                                </script>
+                                <div class="col-md-12 mb-2"> Brand: {{brand}} | Cost: {{price}} SEK | Weight: {{weight}} kg </div>
+                                <h6 class="col-md-12">Available colors</h6>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+
+                                    {{#data.options}}
+
+                                    <div class="float-left mr-2">
+                                        <span class="font-weight-bold text-capitalize m-1" style="width: 40px; height: 30px;">{{color}}</span>
+                                        <div class="border" style="background: {{color}}; width: 46px; height: 34px;"></div>
+                                    </div>
+
+                                    {{/data.options}}
+
+                                </div>
+                            </div>
+                            <div class="formgroup" id="productOptions">
+                                <div class="col-md-12 pl-0">
+                                    <label class="font-weight-bold">Select product</label>
+                                </div>
+                                <div class="col-md-8 pl-0">
+                                    <select class="custom-select" name="itemIdIdentifier">
+
+                                        {{#optionsSetup}}
+
+                                        <option id="option{{quantity}}{{color}}{{power}}{{storage}}">{{color}} | {{power}} {{powerunit}}{{storage}} {{storageunit}} [{{quantity}} in stock]</option>
+                                        <script>
+                                               // If item is not in stock (quantity = 0) the element is removed and therefor not displayed.
+                                               if ({{ quantity }} == 0) {
+                                                document.getElementById("option" + "{{quantity}}" + "{{color}}" + "{{ power }}" + "{{ storage }}").remove();
+                                            }
+                                            // setting value of element to match itemIdIdentifier for transfer of data into route.
+                                            var optionElement = document.getElementById("option" + "{{quantity}}" + "{{color}}" + "{{ power }}" + "{{ storage }}");
+                                            stringId = "{{ id }}";
+                                            stringColor = "{{ color }}";
+                                            stringPower = "{{ power }}";
+                                            stringStorage = "{{ storage }}";
+                                            optionElement.value = stringId + stringColor + stringPower + stringStorage;
+
+                                        </script>
+
+                                        {{/optionsSetup}}
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="addToCart{{id}}" class="col-md-12 mt-4 pl-0"></div>
+                        </div>
+                        <script>
+                                // If item is unavailable (available = false) the options field is removed and therefor not displayed.
+                                // Also a text that tells the user the product is not available.
+                                if ({{ available }} == true) {
+                                    document.getElementById({{ id }}).innerHTML = '<span class="pb-2 pr-0 pt-0 text-right" style="color: green">Available</span>';
+                                    document.getElementById("addToCart" + {{ id }}).innerHTML = "<input class='btn btn-primary m-1' type='submit' value='Add product to cart'>";
+                                } else {
+                                    document.getElementById({{ id }}).innerHTML = '<span class="pb-2 pr-0 pt-0 text-right" style="color: red">Unavailable</span>';
+                                    document.getElementById("productOptions").remove();
+                                    document.getElementById("addToCart" + {{ id }}).innerHTML = "<a href='/'>This product is unfortunately unavailable at the moment. Click here to view all our products</a>";
+                                }
+                        </script>
+
+                        {{/data}}
+
+                    </form>
+                </div>
+                <div class="col-md-6 mt-2">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-2">
+                    <span><a href="/">- Back</a></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {{>footerdefault}}
+
+</body>
+
+</html>

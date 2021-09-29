@@ -1,0 +1,7 @@
+<footer>
+    <div class="py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0 py-2">Joakim Engqvist - Lendo AB Front-End Assignment.</p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,87 @@
+
+body {
+    background: whitesmoke !important
+}
+
+.border-left-simplistic-blue {
+    border-bottom-style: solid;
+    border-bottom-color: #dee2e6;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-color: #dee2e6;
+    border-top-width: 1px;
+    border-right-style: solid;
+    border-right-color: #dee2e6;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgba(0, 123, 255, 0.5);
+    border-left-width: 5px;
+}
+
+.border-left-simplistic-orange {
+    border-bottom-style: solid;
+    border-bottom-color: #dee2e6;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-color: #dee2e6;
+    border-top-width: 1px;
+    border-right-style: solid;
+    border-right-color: #dee2e6;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgba(255, 136, 0, 0.5);
+    border-left-width: 5px;
+}
+
+.border-left-simplistic-purple {
+    border-bottom-style: solid;
+    border-bottom-color: #dee2e6;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-color: #dee2e6;
+    border-top-width: 1px;
+    border-right-style: solid;
+    border-right-color: #dee2e6;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-left-color: rgba(103, 58, 183, 0.5);
+    border-left-width: 5px;
+}
+
+.border-left-simplistic-light-grey {
+    border-bottom-style: solid;
+    border-bottom-color: #dee2e6;
+    border-bottom-width: 1px;
+    border-top-style: solid;
+    border-top-color: #dee2e6;
+    border-top-width: 1px;
+    border-right-style: solid;
+    border-right-color: #dee2e6;
+    border-right-width: 1px;
+    border-left-style: solid;
+    border-left-color: #e0e0e0;
+    border-left-width: 5px;
+}
+
+.btn-circle {
+    border-radius: 50% !important
+}
+
+.input-item-amount {
+    border-bottom: solid 1.6px lightslategrey !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-radius: 0px !important;
+    max-width: 35px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}

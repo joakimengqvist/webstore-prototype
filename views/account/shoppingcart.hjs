@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html>
+<head>
+    <!--
+    required head tags, i choose to use https links as js and css includes for making the project easier to manage,
+    in a deployed production app I would have these locally to not be reliant on other services for UX and design
+    -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <!--
+    Shopping Cart Page
+    Page that shows the shopping cart and checkout
+    -->
+
+    {{>headercart}}
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 mt-2">
+                    <span><a href="/">Home</a></span>
+                    <span class="text-primary"> / </span>
+                    <span><a href="/shoppingcart">Cart</a></span>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-8 mt-2 pb-4 border-left-simplistic-orange bg-white shadow">
+                    <h4 class="col-12 m-1 mt-3">Checkout</h4>
+                    <h5 class="col-12 ml-1 mb-2 mt-0 font-weight-light">Summary and confirmation</h5>
+                    <ul class="mb-0">
+
+                        {{#itemsInCart}}
+
+                        <li class="row mt-3">
+                            <div class="col-md-12 border-bottom">
+                                <form class="mt-2 mb-1 form-row form-group" method="post" action="/shoppingcart/additemamount">
+                                    <div class="col-md-8 mr-1">
+                                        <a id="{{itemIdIdentifier}}" class="h5 text-dark" href="/products/itemsdetails/{{id}}">{{name}}</a><span> x{{incart}}</span><br />
+                                        <script>
+                                        // Simple 'hack' that's hardcoded to fix specific � character problem from json import,
+                                        // this should be fixed from the database for easier mantainment and development.
+                                            var string = '{{ name }}';
+                                        if (string.indexOf('�') != -1) {
+                                            string = string.replace(/[�]/g, '&aring');
+                                            document.getElementById('{{itemIdIdentifier}}').innerHTML = string;
+                                        }
+                                        </script>
+                                        Brand: {{brand}} | Color: {{color}} | Weight: {{weight}} Kg | {{power}} {{powerunit}}{{storage}} {{storageunit}} | {{price}} kr
+                                    </div>
+                                    <a class="ml-4 mr-1 mt-2" href="/shoppingcart/removeitem/{{itemIdIdentifier}}"><span class="material-icons" style="font-size: 38px">remove_circle</span></a>
+                                    <input type="hidden" name="itemIdIdentifier" value="{{itemIdIdentifier}}" />
+                                    <input type="number" class="mt-2 form-control text-center font-weight-bold input-item-amount" name="incart" value="{{incart}}" style="max-width: 58px;">
+                                    <a class="ml-1 mr-2 mt-2" href="/shoppingcart/additem/{{itemIdIdentifier}}"><span class="material-icons" style="font-size: 38px">add_circle</span></a>
+                                    <a class="mt-2 font-weight-bold text-right" href="/shoppingcart/removeallitems/{{itemIdIdentifier}}"><span class="material-icons text-secondary" style="font-size: 38px">delete_forever</span></a>
+                                </form>
+                            </div>
+                        </li>
+
+                        {{/itemsInCart}}
+
+                    </ul>
+                    <ul class="mb-2">
+                        <li class="row mt-2">
+                             <div class="col-md-8"></div>
+                            <div class="col-md-4 pb-0">
+                                <span class="h5">Total Cost: {{checkOutSummaryPrice}} SEK</span>
+                                <p class="mb-0">{{checkOutSummaryStock}} products</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li class="row">
+                            <div class="col-md-8">
+                                <a class="btn btn-outline-danger mr-4" href="/shoppingcart/clearcart">Clear cart</a>
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <a class="mr-4 btn btn-primary btn-block" href="#">Confirm Order</a>
+                            </div>
+                            <div class="col-md-1 text-right">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8 mt-2">
+                    <span><a href="/">- Back</a></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {{>footerdefault}}
+
+</body>
+</html>
